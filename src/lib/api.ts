@@ -91,11 +91,17 @@ export interface Shelter {
     | {
         street: string;
         city: string;
+        province?: string;
         country: string;
         postal_code: string;
       };
   phone: string;
   email: string;
+  description?: string;
+  // Algunos endpoints pueden devolver `contact_email` en lugar de `email`.
+  contact_email?: string;
+  // Backwards compatibility si algún endpoint devolviera `contact_phone`.
+  contact_phone?: string;
 }
 
 export type SpeciesUpsertPayload = {
@@ -109,21 +115,36 @@ export type BreedUpsertPayload = {
 
 export type ShelterUpsertPayload = {
   shelter_name: string;
-  contact_phone: string;
   contact_email: string;
+  phone: string;
+  description?: string;
   address: {
     street: string;
     city: string;
+    province: string;
     country: string;
     postal_code: string;
   };
 };
 
 const sanitizeShelterUpsertPayload = (data: any): ShelterUpsertPayload => {
-  // El backend falla si llega id_shelter como string vacío (bigint).
-  // En create/update, el ID siempre va en la URL, nunca en el body.
-  const { id_shelter, ...rest } = data ?? {};
-  return rest as ShelterUpsertPayload;
+  // Regla crítica: en POST (crear) NUNCA debe viajar `id_shelter` (ni como "", ni null).
+  // Además, el backend espera `phone` (no `contact_phone`) y `contact_email`.
+  const { id_shelter: _idShelter, contact_phone: _contactPhone, ...rest } = data ?? {};
+
+  return {
+    shelter_name: rest.shelter_name,
+    contact_email: rest.contact_email,
+    phone: rest.phone,
+    description: rest.description,
+    address: {
+      street: rest.address?.street,
+      city: rest.address?.city,
+      province: rest.address?.province,
+      postal_code: rest.address?.postal_code,
+      country: rest.address?.country,
+    },
+  };
 };
 
 export type AnimalUpsertPayload = {
