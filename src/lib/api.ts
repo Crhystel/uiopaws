@@ -36,12 +36,19 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
-  roles: string[];
+  roles?: Array<{
+    id: number;
+    name: string;
+    guard_name?: string;
+  }>;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
+export interface LoginResponse {
+  access_token: string;
+  token_type: 'Bearer' | string;
+  user_role: 'Super Admin' | 'Admin' | 'User' | string;
+  status?: number;
+  user?: User;
 }
 
 export interface Animal {
@@ -108,8 +115,12 @@ export interface PaginatedResponse<T> {
 
 // Auth API
 export const authApi = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
+  login: async (email: string, password: string): Promise<LoginResponse> => {
     const response = await adminApi.post('/login', { email, password });
+    return response.data;
+  },
+  profile: async (): Promise<User> => {
+    const response = await adminApi.get('/profile');
     return response.data;
   },
 };

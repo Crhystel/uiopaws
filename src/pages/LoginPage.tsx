@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Mail, Lock, Loader2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,16 +11,11 @@ import { FloatingPaws, BlobShape } from '@/components/ui/decorative-shapes';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { login, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  // If there is no intended protected destination, send the user through
-  // the role-based redirect entry point.
-  const from = (location.state as any)?.from || '/dashboard';
 
   // If the user is already logged in and lands on /login, send them to /dashboard.
   useEffect(() => {
@@ -41,9 +36,7 @@ const LoginPage = () => {
       });
 
       // Always go through the role-based redirect entry point after login.
-      // If a protected route sent us here, we'll honor it only if it's a string.
-      const safeFrom = typeof from === 'string' ? from : '/dashboard';
-      navigate(safeFrom === '/' ? '/dashboard' : safeFrom, { replace: true });
+      navigate('/dashboard', { replace: true });
     } catch (error: any) {
       toast({
         title: 'Error al iniciar sesión',
