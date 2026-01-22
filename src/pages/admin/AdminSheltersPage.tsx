@@ -52,9 +52,11 @@ const AdminSheltersPage = () => {
     shelter_name: '',
     phone: '',
     email: '',
+    description: '',
     address: {
       street: '',
       city: '',
+      province: '',
       country: '',
       postal_code: '',
     },
@@ -82,9 +84,11 @@ const AdminSheltersPage = () => {
       shelter_name: '',
       phone: '',
       email: '',
+      description: '',
       address: {
         street: '',
         city: '',
+        province: '',
         country: '',
         postal_code: '',
       },
@@ -96,15 +100,23 @@ const AdminSheltersPage = () => {
     setSelectedShelter(shelter);
     const addressObj =
       typeof shelter.address === 'string'
-        ? { street: shelter.address, city: '', country: '', postal_code: '' }
+        ? { street: shelter.address, city: '', province: '', country: '', postal_code: '' }
         : shelter.address;
+
+    // Backwards compatible: algunos endpoints pueden devolver `email`/`contact_email` y `phone`/`contact_phone`.
+    const shelterEmail = (shelter as any).contact_email ?? (shelter as any).email ?? '';
+    const shelterPhone = (shelter as any).phone ?? (shelter as any).contact_phone ?? '';
+    const shelterDescription = (shelter as any).description ?? '';
+
     setFormData({
       shelter_name: shelter.shelter_name,
-      phone: shelter.phone,
-      email: shelter.email,
+      phone: shelterPhone,
+      email: shelterEmail,
+      description: shelterDescription,
       address: {
         street: addressObj?.street || '',
         city: addressObj?.city || '',
+        province: (addressObj as any)?.province || '',
         country: addressObj?.country || '',
         postal_code: addressObj?.postal_code || '',
       },
@@ -119,13 +131,21 @@ const AdminSheltersPage = () => {
     try {
       const payload: any = {
         shelter_name: formData.shelter_name,
-        contact_phone: formData.phone,
         contact_email: formData.email,
-        address: formData.address,
+        phone: formData.phone,
+        description: formData.description,
+        address: {
+          street: formData.address.street,
+          city: formData.address.city,
+          province: formData.address.province,
+          postal_code: formData.address.postal_code,
+          country: formData.address.country,
+        },
       };
 
-      // Asegura que nunca se envíe un id_shelter (o cualquier id) en el body.
-      delete payload.id_shelter;
+      // POST (crear): eliminar COMPLETAMENTE id_shelter del JSON.
+      // (El servicio también sanitiza, pero lo hacemos aquí para garantizarlo.)
+      if (!selectedShelter) delete payload.id_shelter;
 
       if (selectedShelter) {
         await adminSheltersApi.update(selectedShelter.id_shelter, payload);
@@ -309,6 +329,17 @@ const AdminSheltersPage = () => {
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="address_province">Provincia</Label>
+                <Input
+                  id="address_province"
+                  value={formData.address.province}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, address: { ...p.address, province: e.target.value } }))
+                  }
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="address_country">País</Label>
                 <Input
                   id="address_country"
@@ -352,6 +383,16 @@ const AdminSheltersPage = () => {
                   required
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción</Label>
+              <Input
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="(Opcional)"
+              />
             </div>
 
             <DialogFooter>
