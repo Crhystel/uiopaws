@@ -76,6 +76,7 @@ const AdminDonationsPage = () => {
   const [selected, setSelected] = useState<DonationItemCatalog | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+  const [permissionError, setPermissionError] = useState(false);
 
   const shelterOptions = useMemo(
     () => [{ id_shelter: -1, shelter_name: 'Todos los refugios' } as Shelter, ...shelters],
@@ -90,15 +91,21 @@ const AdminDonationsPage = () => {
 
   const loadAll = async () => {
     setIsLoading(true);
+    setPermissionError(false);
     try {
       const [catalog, sheltersData] = await Promise.all([
         adminDonationItemsCatalogApi.getAll(),
         publicCatalogsApi.getShelters(),
       ]);
-      setItems(catalog.data ?? []);
+      setItems(catalog);
       setShelters(sheltersData);
-    } catch (e) {
-      toast({ title: 'Error', description: 'No se pudieron cargar las donaciones', variant: 'destructive' });
+    } catch (e: any) {
+      const status = e?.response?.status;
+      if (status === 403 || status === 401) {
+        setPermissionError(true);
+      } else {
+        toast({ title: 'Error', description: 'No se pudieron cargar las donaciones', variant: 'destructive' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -224,6 +231,11 @@ const AdminDonationsPage = () => {
               {isLoading ? (
                 <div className="flex items-center justify-center py-16">
                   <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                  <span className="ml-3 text-muted-foreground">Cargando catálogo...</span>
+                </div>
+              ) : permissionError ? (
+                <div className="text-center py-16 text-destructive">
+                  No tienes permisos de administrador para ver esto.
                 </div>
               ) : items.length === 0 ? (
                 <div className="text-center py-16 text-muted-foreground">Aún no hay ítems.</div>
