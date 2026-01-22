@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Plus,
   Search,
@@ -40,6 +40,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { adminAnimalsApi, adminPhotosApi, publicCatalogsApi, Animal, Species, Breed, Shelter } from '@/lib/api';
+import { resolveAnimalPhotoUrl } from '@/lib/media';
 
 const AdminAnimalsPage = () => {
   const { toast } = useToast();
@@ -72,11 +73,22 @@ const AdminAnimalsPage = () => {
   });
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [isPhotoSaving, setIsPhotoSaving] = useState(false);
+  const editPhotoInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     fetchAnimals();
     fetchCatalogs();
   }, []);
+
+  const refreshSelectedAnimal = async (animalId: number) => {
+    try {
+      const data = await adminAnimalsApi.getById(animalId);
+      setSelectedAnimal(data);
+    } catch (error) {
+      console.error('Error refreshing animal:', error);
+    }
+  };
 
   const fetchAnimals = async () => {
     try {
@@ -145,6 +157,46 @@ const AdminAnimalsPage = () => {
       size: animal.size,
     });
     setIsDialogOpen(true);
+
+    // Ensure we have the latest photos/medical records for this animal.
+    void refreshSelectedAnimal(animal.id_animal);
+  };
+
+  const handleUploadEditPhoto = async (file: File) => {
+    if (!selectedAnimal) return;
+    setIsPhotoSaving(true);
+    try {
+      await adminPhotosApi.upload(selectedAnimal.id_animal, file);
+      toast({ title: 'Éxito', description: 'Foto subida correctamente' });
+      await refreshSelectedAnimal(selectedAnimal.id_animal);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.message || 'No se pudo subir la foto',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsPhotoSaving(false);
+      if (editPhotoInputRef.current) editPhotoInputRef.current.value = '';
+    }
+  };
+
+  const handleDeletePhoto = async (photoId: number) => {
+    if (!selectedAnimal) return;
+    setIsPhotoSaving(true);
+    try {
+      await adminPhotosApi.delete(photoId);
+      toast({ title: 'Éxito', description: 'Foto eliminada' });
+      await refreshSelectedAnimal(selectedAnimal.id_animal);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.message || 'No se pudo eliminar la foto',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsPhotoSaving(false);
+    }
   };
 
   const filteredBreeds = formData.id_species
@@ -515,6 +567,73 @@ const AdminAnimalsPage = () => {
                   accept="image/*"
                   onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
                 />
+              </div>
+            )}
+
+            {selectedAnimal && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <Label>Fotos</Label>
+                    <p className="text-sm text-muted-foreground">Sube nuevas fotos o elimina las existentes.</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      ref={editPhotoInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) void handleUploadEditPhoto(file);
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={isPhotoSaving}
+                      onClick={() => editPhotoInputRef.current?.click()}
+                    >
+                      {isPhotoSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                      Subir foto
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {(selectedAnimal.photos ?? []).length === 0 ? (
+                    <div className="col-span-full text-sm text-muted-foreground">
+                      Este animal aún no tiene fotos.
+                    </div>
+                  ) : (
+                    (selectedAnimal.photos ?? []).map((photo) => (
+                      <div
+                        key={photo.id_photo}
+                        className="relative overflow-hidden rounded-xl border bg-card"
+                      >
+                        <img
+                          src={resolveAnimalPhotoUrl(photo, '/placeholder.svg')}
+                          alt={`Foto ${selectedAnimal.animal_name}`}
+                          className="h-32 w-full object-cover"
+                          loading="lazy"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-2 top-2 rounded-full bg-background/80 backdrop-blur-sm text-destructive hover:text-destructive"
+                          disabled={isPhotoSaving}
+                          onClick={() => void handleDeletePhoto(photo.id_photo)}
+                          aria-label="Eliminar foto"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             )}
 

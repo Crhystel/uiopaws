@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { Heart, MapPin, Calendar } from 'lucide-react';
 import { Animal } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
+import { resolveAnimalPhotoUrl } from '@/lib/media';
 
 interface AnimalCardProps {
   animal: Animal;
 }
 
 const AnimalCard = ({ animal }: AnimalCardProps) => {
-  const photoUrl = animal.photos?.[0]?.photo_url || '/placeholder.svg';
+  const photoUrl = resolveAnimalPhotoUrl(animal.photos?.[0], '/placeholder.svg');
 
   const getSizeLabel = (size: string) => {
     switch (size) {
