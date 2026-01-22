@@ -54,7 +54,9 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
   }, [filters.id_species, breeds]);
 
   const handleChange = (key: keyof FiltersState, value: string) => {
-    const newFilters = { ...filters, [key]: value };
+    // Normalización: en el estado guardamos "" para representar "Todos".
+    const normalizedValue = value === 'all' ? '' : value;
+    const newFilters = { ...filters, [key]: normalizedValue };
     if (key === 'id_species') {
       newFilters.id_breed = '';
     }
@@ -62,9 +64,10 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
   };
 
   const sizes = [
-    { value: 'Small', label: 'Pequeño' },
-    { value: 'Medium', label: 'Mediano' },
-    { value: 'Large', label: 'Grande' },
+    // La API valida estos valores en español.
+    { value: 'Pequeño', label: 'Pequeño' },
+    { value: 'Mediano', label: 'Mediano' },
+    { value: 'Grande', label: 'Grande' },
   ];
 
   return (
@@ -83,7 +86,7 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Species */}
         <Select
-          value={filters.id_species}
+          value={filters.id_species || 'all'}
           onValueChange={(value) => handleChange('id_species', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
@@ -101,7 +104,7 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
 
         {/* Breed */}
         <Select
-          value={filters.id_breed}
+          value={filters.id_breed || 'all'}
           onValueChange={(value) => handleChange('id_breed', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
@@ -119,7 +122,7 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
 
         {/* Size */}
         <Select
-          value={filters.size}
+          value={filters.size || 'all'}
           onValueChange={(value) => handleChange('size', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
@@ -137,7 +140,7 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
 
         {/* Shelter */}
         <Select
-          value={filters.id_shelter}
+          value={filters.id_shelter || 'all'}
           onValueChange={(value) => handleChange('id_shelter', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
