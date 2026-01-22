@@ -14,6 +14,7 @@ const Navbar = () => {
   const navLinks = [
     { href: '/', label: 'Inicio' },
     { href: '/animals', label: 'Adoptar Mascota' },
+    { href: '/donations', label: 'Donaciones' },
   ];
 
   const handleLogout = () => {

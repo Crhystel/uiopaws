@@ -5,6 +5,7 @@ import {
   Dog, 
   Cat, 
   Home, 
+  Gift,
   LayoutDashboard,
   ArrowRight
 } from 'lucide-react';
@@ -44,6 +45,13 @@ const AdminDashboard = () => {
       icon: Home,
       href: '/admin/shelters',
       color: 'bg-sage text-foreground',
+    },
+    {
+      title: 'Donaciones',
+      description: 'Gestionar catálogo de necesidades',
+      icon: Gift,
+      href: '/admin/donations',
+      color: 'bg-secondary text-foreground',
     },
   ];
 

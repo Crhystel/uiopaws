@@ -13,6 +13,7 @@ import AnimalDetailPage from "./pages/AnimalDetailPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ComingSoonPage from "./pages/ComingSoonPage";
+import DonationsPage from "./pages/DonationsPage";
 import UserDashboard from "./pages/UserDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -20,6 +21,7 @@ import AdminAnimalsPage from "./pages/admin/AdminAnimalsPage";
 import AdminSheltersPage from "./pages/admin/AdminSheltersPage";
 import AdminSpeciesPage from "./pages/admin/AdminSpeciesPage";
 import AdminBreedsPage from "./pages/admin/AdminBreedsPage";
+import AdminDonationsPage from "./pages/admin/AdminDonationsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/animals" element={<AnimalsPage />} />
           <Route path="/animals/:id" element={<AnimalDetailPage />} />
+          <Route path="/donations" element={<DonationsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/adopt/coming-soon" element={<ComingSoonPage />} />
@@ -100,6 +103,14 @@ const App = () => (
             element={
               <ProtectedRoute requiredRole="Admin">
                 <AdminSheltersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/donations"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminDonationsPage />
               </ProtectedRoute>
             }
           />

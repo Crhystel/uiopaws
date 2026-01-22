@@ -206,6 +206,35 @@ export interface PaginatedResponse<T> {
   total: number;
 }
 
+export type DonationCategory =
+  | 'Alimentos'
+  | 'Medicamentos'
+  | 'Juguetes'
+  | 'Ropa de cama'
+  | 'Higiene'
+  | 'Otros';
+
+export interface DonationItemCatalog {
+  id_donation_item_catalog: number;
+  item_name: string;
+  category: string;
+  quantity_needed: number;
+  description?: string;
+  id_shelter?: number | null;
+  shelter?: Partial<Shelter> | null;
+  collected_quantity?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export type DonationItemCatalogUpsertPayload = {
+  item_name: string;
+  category: DonationCategory;
+  quantity_needed: number;
+  id_shelter?: number;
+  description?: string;
+};
+
 // Auth API
 export const authApi = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
@@ -253,6 +282,18 @@ export const publicCatalogsApi = {
   },
   getShelters: async (): Promise<Shelter[]> => {
     const response = await publicApi.get('/shelters');
+    return response.data;
+  },
+};
+
+export const publicDonationsApi = {
+  getAll: async (params?: {
+    category?: string;
+    id_shelter?: number;
+    search?: string;
+    page?: number;
+  }): Promise<PaginatedResponse<DonationItemCatalog>> => {
+    const response = await publicApi.get('/donation-items', { params });
     return response.data;
   },
 };
@@ -329,6 +370,28 @@ export const adminBreedsApi = {
   },
   delete: async (id: number): Promise<void> => {
     await adminApi.delete(`/admin/breeds/${id}`);
+  },
+};
+
+export const adminDonationItemsCatalogApi = {
+  getAll: async (): Promise<{ data: DonationItemCatalog[] }> => {
+    const response = await adminApi.get('/admin/donation-items-catalog');
+    return response.data;
+  },
+  getById: async (id: number): Promise<DonationItemCatalog> => {
+    const response = await adminApi.get(`/admin/donation-items-catalog/${id}`);
+    return response.data;
+  },
+  create: async (data: DonationItemCatalogUpsertPayload): Promise<any> => {
+    const response = await adminApi.post('/admin/donation-items-catalog', data);
+    return response.data;
+  },
+  update: async (id: number, data: Partial<DonationItemCatalogUpsertPayload>): Promise<any> => {
+    const response = await adminApi.put(`/admin/donation-items-catalog/${id}`, data);
+    return response.data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await adminApi.delete(`/admin/donation-items-catalog/${id}`);
   },
 };
 
