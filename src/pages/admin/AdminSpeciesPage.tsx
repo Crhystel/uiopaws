@@ -79,10 +79,10 @@ const AdminSpeciesPage = () => {
     setIsSaving(true);
     try {
       if (selected) {
-        await adminSpeciesApi.update(selected.id_species, { name: trimmed });
+        await adminSpeciesApi.update(selected.id_species, { species_name: trimmed });
         toast({ title: 'Éxito', description: 'Especie actualizada correctamente' });
       } else {
-        await adminSpeciesApi.create({ name: trimmed });
+        await adminSpeciesApi.create({ species_name: trimmed });
         toast({ title: 'Éxito', description: 'Especie creada correctamente' });
       }
       setIsDialogOpen(false);

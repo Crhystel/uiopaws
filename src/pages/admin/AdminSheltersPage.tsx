@@ -32,6 +32,12 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { adminSheltersApi, Shelter } from '@/lib/api';
 
+const formatShelterAddress = (address: Shelter['address']) => {
+  if (!address) return '';
+  if (typeof address === 'string') return address;
+  return [address.street, address.city, address.country, address.postal_code].filter(Boolean).join(', ');
+};
+
 const AdminSheltersPage = () => {
   const { toast } = useToast();
   const [shelters, setShelters] = useState<Shelter[]>([]);
@@ -44,9 +50,14 @@ const AdminSheltersPage = () => {
 
   const [formData, setFormData] = useState({
     shelter_name: '',
-    address: '',
     phone: '',
     email: '',
+    address: {
+      street: '',
+      city: '',
+      country: '',
+      postal_code: '',
+    },
   });
 
   useEffect(() => {
@@ -69,20 +80,34 @@ const AdminSheltersPage = () => {
     setSelectedShelter(null);
     setFormData({
       shelter_name: '',
-      address: '',
       phone: '',
       email: '',
+      address: {
+        street: '',
+        city: '',
+        country: '',
+        postal_code: '',
+      },
     });
     setIsDialogOpen(true);
   };
 
   const openEditDialog = (shelter: Shelter) => {
     setSelectedShelter(shelter);
+    const addressObj =
+      typeof shelter.address === 'string'
+        ? { street: shelter.address, city: '', country: '', postal_code: '' }
+        : shelter.address;
     setFormData({
       shelter_name: shelter.shelter_name,
-      address: shelter.address,
       phone: shelter.phone,
       email: shelter.email,
+      address: {
+        street: addressObj?.street || '',
+        city: addressObj?.city || '',
+        country: addressObj?.country || '',
+        postal_code: addressObj?.postal_code || '',
+      },
     });
     setIsDialogOpen(true);
   };
@@ -197,7 +222,7 @@ const AdminSheltersPage = () => {
                           {shelter.shelter_name}
                         </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">{shelter.address}</TableCell>
+                      <TableCell className="text-muted-foreground">{formatShelterAddress(shelter.address)}</TableCell>
                       <TableCell>{shelter.phone}</TableCell>
                       <TableCell>{shelter.email}</TableCell>
                       <TableCell className="text-right">
@@ -252,14 +277,49 @@ const AdminSheltersPage = () => {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address">Dirección</Label>
-              <Input
-                id="address"
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="address_street">Calle</Label>
+                <Input
+                  id="address_street"
+                  value={formData.address.street}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, address: { ...p.address, street: e.target.value } }))
+                  }
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address_city">Ciudad</Label>
+                <Input
+                  id="address_city"
+                  value={formData.address.city}
+                  onChange={(e) => setFormData((p) => ({ ...p, address: { ...p.address, city: e.target.value } }))}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address_country">País</Label>
+                <Input
+                  id="address_country"
+                  value={formData.address.country}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, address: { ...p.address, country: e.target.value } }))
+                  }
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address_postal_code">Código Postal</Label>
+                <Input
+                  id="address_postal_code"
+                  value={formData.address.postal_code}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, address: { ...p.address, postal_code: e.target.value } }))
+                  }
+                  required
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

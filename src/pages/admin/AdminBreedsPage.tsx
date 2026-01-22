@@ -44,8 +44,8 @@ const AdminBreedsPage = () => {
   const [selected, setSelected] = useState<Breed | null>(null);
 
   const [formData, setFormData] = useState({
-    name: '',
-    species_id: '',
+    breed_name: '',
+    id_species: '',
   });
 
   const fetchCatalogs = async () => {
@@ -86,30 +86,30 @@ const AdminBreedsPage = () => {
 
   const openCreate = () => {
     setSelected(null);
-    setFormData({ name: '', species_id: '' });
+    setFormData({ breed_name: '', id_species: '' });
     setIsDialogOpen(true);
   };
 
   const openEdit = (b: Breed) => {
     setSelected(b);
-    setFormData({ name: b.breed_name, species_id: b.id_species.toString() });
+    setFormData({ breed_name: b.breed_name, id_species: b.id_species.toString() });
     setIsDialogOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const name = formData.name.trim();
-    const speciesId = parseInt(formData.species_id);
-    if (!name || Number.isNaN(speciesId)) return;
+    const breedName = formData.breed_name.trim();
+    const speciesId = parseInt(formData.id_species);
+    if (!breedName || Number.isNaN(speciesId)) return;
 
     setIsSaving(true);
     try {
       if (selected) {
-        await adminBreedsApi.update(selected.id_breed, { name, species_id: speciesId });
+        await adminBreedsApi.update(selected.id_breed, { breed_name: breedName, id_species: speciesId });
         toast({ title: 'Éxito', description: 'Raza actualizada correctamente' });
       } else {
-        await adminBreedsApi.create({ name, species_id: speciesId });
+        await adminBreedsApi.create({ breed_name: breedName, id_species: speciesId });
         toast({ title: 'Éxito', description: 'Raza creada correctamente' });
       }
       setIsDialogOpen(false);
@@ -236,8 +236,8 @@ const AdminBreedsPage = () => {
               <Label htmlFor="name">Nombre</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+                value={formData.breed_name}
+                onChange={(e) => setFormData((p) => ({ ...p, breed_name: e.target.value }))}
                 required
               />
             </div>
@@ -245,8 +245,8 @@ const AdminBreedsPage = () => {
             <div className="space-y-2">
               <Label htmlFor="species_id">Especie</Label>
               <Select
-                value={formData.species_id}
-                onValueChange={(v) => setFormData((p) => ({ ...p, species_id: v }))}
+                value={formData.id_species}
+                onValueChange={(v) => setFormData((p) => ({ ...p, id_species: v }))}
               >
                 <SelectTrigger id="species_id">
                   <SelectValue placeholder="Seleccionar especie" />

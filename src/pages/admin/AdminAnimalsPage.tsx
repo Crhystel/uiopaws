@@ -39,7 +39,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { adminAnimalsApi, publicCatalogsApi, Animal, Species, Breed, Shelter } from '@/lib/api';
+import { adminAnimalsApi, adminPhotosApi, publicCatalogsApi, Animal, Species, Breed, Shelter } from '@/lib/api';
 
 const AdminAnimalsPage = () => {
   const { toast } = useToast();
@@ -58,7 +58,7 @@ const AdminAnimalsPage = () => {
 
   const [formData, setFormData] = useState({
     animal_name: '',
-    status: 'Available',
+    status: 'Disponible',
     birth_date: '',
     color: '',
     is_sterilized: false,
@@ -66,10 +66,12 @@ const AdminAnimalsPage = () => {
     id_species: '',
     id_breed: '',
     id_shelter: '',
-    sex: 'Male',
+    sex: 'Macho',
     age: '',
-    size: 'Medium',
+    size: 'Mediano',
   });
+
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchAnimals();
@@ -105,9 +107,10 @@ const AdminAnimalsPage = () => {
 
   const openCreateDialog = () => {
     setSelectedAnimal(null);
+    setPhotoFile(null);
     setFormData({
       animal_name: '',
-      status: 'Available',
+      status: 'Disponible',
       birth_date: '',
       color: '',
       is_sterilized: false,
@@ -115,9 +118,9 @@ const AdminAnimalsPage = () => {
       id_species: '',
       id_breed: '',
       id_shelter: '',
-      sex: 'Male',
+      sex: 'Macho',
       age: '',
-      size: 'Medium',
+      size: 'Mediano',
     });
     setIsDialogOpen(true);
   };
@@ -126,6 +129,7 @@ const AdminAnimalsPage = () => {
     const derivedSpeciesId =
       animal.breed?.id_species ?? breeds.find((b) => b.id_breed === animal.id_breed)?.id_species;
     setSelectedAnimal(animal);
+    setPhotoFile(null);
     setFormData({
       animal_name: animal.animal_name,
       status: animal.status,
@@ -164,18 +168,25 @@ const AdminAnimalsPage = () => {
     try {
       // id_species se usa solo para filtrar razas en el UI
       const { id_species: _idSpecies, ...rest } = formData;
-      const data = {
+      const data: any = {
         ...rest,
         id_breed: parseInt(formData.id_breed),
         id_shelter: parseInt(formData.id_shelter),
         age: parseInt(formData.age),
       };
 
+      // birth_date y description son opcionales
+      if (!data.birth_date) delete data.birth_date;
+      if (!data.description) delete data.description;
+
       if (selectedAnimal) {
         await adminAnimalsApi.update(selectedAnimal.id_animal, data);
         toast({ title: 'Éxito', description: 'Animal actualizado correctamente' });
       } else {
-        await adminAnimalsApi.create(data);
+        const created = await adminAnimalsApi.create(data);
+        if (photoFile) {
+          await adminPhotosApi.upload(created.id_animal, photoFile);
+        }
         toast({ title: 'Éxito', description: 'Animal creado correctamente' });
       }
 
@@ -217,24 +228,24 @@ const AdminAnimalsPage = () => {
   );
 
   const sizes = [
-    { value: 'Small', label: 'Pequeño' },
-    { value: 'Medium', label: 'Mediano' },
-    { value: 'Large', label: 'Grande' },
+    { value: 'Pequeño', label: 'Pequeño' },
+    { value: 'Mediano', label: 'Mediano' },
+    { value: 'Grande', label: 'Grande' },
   ];
 
   const statuses = [
-    { value: 'Available', label: 'Disponible' },
-    { value: 'Adopted', label: 'Adoptado' },
-    { value: 'Pending', label: 'Pendiente' },
+    { value: 'Disponible', label: 'Disponible' },
+    { value: 'Adoptado', label: 'Adoptado' },
+    { value: 'En tratamiento', label: 'En tratamiento' },
   ];
 
   const sexes = [
-    { value: 'Male', label: 'Macho' },
-    { value: 'Female', label: 'Hembra' },
+    { value: 'Macho', label: 'Macho' },
+    { value: 'Hembra', label: 'Hembra' },
   ];
 
   const getStatusLabel = (status: string) => {
-    const found = statuses.find(s => s.value === status);
+    const found = statuses.find((s) => s.value === status);
     return found ? found.label : status;
   };
 
@@ -293,12 +304,12 @@ const AdminAnimalsPage = () => {
                     <TableRow key={animal.id_animal}>
                       <TableCell className="font-medium">{animal.animal_name}</TableCell>
                       <TableCell>
-                        <Badge variant={animal.status === 'Available' ? 'default' : 'secondary'} className="rounded-full">
+                        <Badge variant={animal.status === 'Disponible' ? 'default' : 'secondary'} className="rounded-full">
                           {getStatusLabel(animal.status)}
                         </Badge>
                       </TableCell>
                       <TableCell>{animal.breed?.breed_name || 'N/A'}</TableCell>
-                      <TableCell>{sizes.find(s => s.value === animal.size)?.label || animal.size}</TableCell>
+                      <TableCell>{sizes.find((s) => s.value === animal.size)?.label || animal.size}</TableCell>
                       <TableCell>{animal.age} años</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
@@ -472,7 +483,6 @@ const AdminAnimalsPage = () => {
                   type="date"
                   value={formData.birth_date}
                   onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -495,6 +505,18 @@ const AdminAnimalsPage = () => {
                 rows={3}
               />
             </div>
+
+            {!selectedAnimal && (
+              <div className="space-y-2">
+                <Label htmlFor="photo">Foto (opcional)</Label>
+                <Input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
+                />
+              </div>
+            )}
 
             <div className="flex items-center gap-2">
               <Checkbox
