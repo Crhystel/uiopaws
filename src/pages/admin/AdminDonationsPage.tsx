@@ -82,6 +82,12 @@ const AdminDonationsPage = () => {
     [shelters],
   );
 
+  const shelterNameById = useMemo(() => {
+    const map = new Map<number, string>();
+    shelters.forEach((s) => map.set(s.id_shelter, s.shelter_name));
+    return map;
+  }, [shelters]);
+
   const loadAll = async () => {
     setIsLoading(true);
     try {
@@ -228,7 +234,10 @@ const AdminDonationsPage = () => {
                       <CardHeader>
                         <CardTitle className="text-base">{item.item_name}</CardTitle>
                         <p className="text-sm text-muted-foreground">
-                          {item.category} · {item.shelter?.shelter_name ?? 'Todos'}
+                          {item.category} ·{' '}
+                          {item.id_shelter
+                            ? shelterNameById.get(item.id_shelter) ?? 'Refugio no especificado'
+                            : 'Todos los refugios'}
                         </p>
                       </CardHeader>
                       <CardContent className="space-y-3">
