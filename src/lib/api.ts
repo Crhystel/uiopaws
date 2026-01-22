@@ -23,7 +23,8 @@ export const adminApi = axios.create({
 // Add auth interceptor for admin API
 adminApi.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
-  if (token) {
+  // Ignore corrupted values like "undefined" that may be left in storage.
+  if (token && token !== 'undefined' && token !== 'null') {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

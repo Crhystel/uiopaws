@@ -18,14 +18,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const clearStoredAuth = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_user');
+  };
+
+  const safeParseUser = (value: string): User | null => {
+    // Some environments end up persisting the literal string "undefined".
+    if (!value || value === 'undefined' || value === 'null') return null;
+    try {
+      return JSON.parse(value) as User;
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     // Check for existing auth on mount
     const storedToken = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
-    
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+
+    // Guard against corrupted storage (e.g. "undefined") that can break production builds.
+    const parsedUser = storedUser ? safeParseUser(storedUser) : null;
+    const normalizedToken =
+      storedToken && storedToken !== 'undefined' && storedToken !== 'null' ? storedToken : null;
+
+    if (normalizedToken && parsedUser) {
+      setToken(normalizedToken);
+      setUser(parsedUser);
+    } else if (storedToken || storedUser) {
+      // If something is present but invalid, clear it to avoid crash loops.
+      clearStoredAuth();
     }
     setIsLoading(false);
   }, []);
