@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import {
   Plus,
   Search,
   Edit,
   Trash2,
   Loader2,
-  PawPrint,
   ArrowLeft,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -83,7 +81,7 @@ const AdminAnimalsPage = () => {
       setAnimals(response.data);
     } catch (error) {
       console.error('Error fetching animals:', error);
-      toast({ title: 'Error', description: 'Failed to fetch animals', variant: 'destructive' });
+      toast({ title: 'Error', description: 'No se pudieron cargar los animales', variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
@@ -154,10 +152,10 @@ const AdminAnimalsPage = () => {
 
       if (selectedAnimal) {
         await adminAnimalsApi.update(selectedAnimal.id_animal, data);
-        toast({ title: 'Success', description: 'Animal updated successfully' });
+        toast({ title: 'Éxito', description: 'Animal actualizado correctamente' });
       } else {
         await adminAnimalsApi.create(data);
-        toast({ title: 'Success', description: 'Animal created successfully' });
+        toast({ title: 'Éxito', description: 'Animal creado correctamente' });
       }
 
       setIsDialogOpen(false);
@@ -165,7 +163,7 @@ const AdminAnimalsPage = () => {
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to save animal',
+        description: error.response?.data?.message || 'No se pudo guardar el animal',
         variant: 'destructive',
       });
     } finally {
@@ -179,13 +177,13 @@ const AdminAnimalsPage = () => {
 
     try {
       await adminAnimalsApi.delete(selectedAnimal.id_animal);
-      toast({ title: 'Success', description: 'Animal deleted successfully' });
+      toast({ title: 'Éxito', description: 'Animal eliminado correctamente' });
       setIsDeleteDialogOpen(false);
       fetchAnimals();
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to delete animal',
+        description: error.response?.data?.message || 'No se pudo eliminar el animal',
         variant: 'destructive',
       });
     } finally {
@@ -197,8 +195,27 @@ const AdminAnimalsPage = () => {
     animal.animal_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const sizes = ['Small', 'Medium', 'Large'];
-  const statuses = ['Available', 'Adopted', 'Pending'];
+  const sizes = [
+    { value: 'Small', label: 'Pequeño' },
+    { value: 'Medium', label: 'Mediano' },
+    { value: 'Large', label: 'Grande' },
+  ];
+
+  const statuses = [
+    { value: 'Available', label: 'Disponible' },
+    { value: 'Adopted', label: 'Adoptado' },
+    { value: 'Pending', label: 'Pendiente' },
+  ];
+
+  const sexes = [
+    { value: 'Male', label: 'Macho' },
+    { value: 'Female', label: 'Hembra' },
+  ];
+
+  const getStatusLabel = (status: string) => {
+    const found = statuses.find(s => s.value === status);
+    return found ? found.label : status;
+  };
 
   return (
     <Layout>
@@ -211,13 +228,13 @@ const AdminAnimalsPage = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Manage Animals</h1>
-                <p className="text-muted-foreground">Add, edit, or remove animals from the platform</p>
+                <h1 className="text-2xl font-bold text-foreground">Gestionar Animales</h1>
+                <p className="text-muted-foreground">Agregar, editar o eliminar animales de la plataforma</p>
               </div>
             </div>
             <Button onClick={openCreateDialog} className="rounded-full gap-2">
               <Plus className="w-4 h-4" />
-              Add Animal
+              Agregar Animal
             </Button>
           </div>
 
@@ -225,7 +242,7 @@ const AdminAnimalsPage = () => {
           <div className="relative mb-6 max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search animals..."
+              placeholder="Buscar animales..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 rounded-full bg-secondary border-0 h-12"
@@ -242,12 +259,12 @@ const AdminAnimalsPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Species/Breed</TableHead>
-                    <TableHead>Size</TableHead>
-                    <TableHead>Age</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Especie/Raza</TableHead>
+                    <TableHead>Tamaño</TableHead>
+                    <TableHead>Edad</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -256,12 +273,12 @@ const AdminAnimalsPage = () => {
                       <TableCell className="font-medium">{animal.animal_name}</TableCell>
                       <TableCell>
                         <Badge variant={animal.status === 'Available' ? 'default' : 'secondary'} className="rounded-full">
-                          {animal.status}
+                          {getStatusLabel(animal.status)}
                         </Badge>
                       </TableCell>
                       <TableCell>{animal.breed?.breed_name || 'N/A'}</TableCell>
-                      <TableCell>{animal.size}</TableCell>
-                      <TableCell>{animal.age} yrs</TableCell>
+                      <TableCell>{sizes.find(s => s.value === animal.size)?.label || animal.size}</TableCell>
+                      <TableCell>{animal.age} años</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Button
@@ -298,15 +315,15 @@ const AdminAnimalsPage = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{selectedAnimal ? 'Edit Animal' : 'Add New Animal'}</DialogTitle>
+            <DialogTitle>{selectedAnimal ? 'Editar Animal' : 'Agregar Nuevo Animal'}</DialogTitle>
             <DialogDescription>
-              {selectedAnimal ? 'Update the animal details below.' : 'Fill in the details for the new animal.'}
+              {selectedAnimal ? 'Actualiza los datos del animal a continuación.' : 'Completa los datos del nuevo animal.'}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="animal_name">Name</Label>
+                <Label htmlFor="animal_name">Nombre</Label>
                 <Input
                   id="animal_name"
                   value={formData.animal_name}
@@ -315,14 +332,14 @@ const AdminAnimalsPage = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
+                <Label htmlFor="status">Estado</Label>
                 <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {statuses.map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                      <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -331,10 +348,10 @@ const AdminAnimalsPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="id_breed">Breed</Label>
+                <Label htmlFor="id_breed">Raza</Label>
                 <Select value={formData.id_breed} onValueChange={(v) => setFormData({ ...formData, id_breed: v })}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select breed" />
+                    <SelectValue placeholder="Seleccionar raza" />
                   </SelectTrigger>
                   <SelectContent>
                     {breeds.map((b) => (
@@ -344,10 +361,10 @@ const AdminAnimalsPage = () => {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="id_shelter">Shelter</Label>
+                <Label htmlFor="id_shelter">Refugio</Label>
                 <Select value={formData.id_shelter} onValueChange={(v) => setFormData({ ...formData, id_shelter: v })}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select shelter" />
+                    <SelectValue placeholder="Seleccionar refugio" />
                   </SelectTrigger>
                   <SelectContent>
                     {shelters.map((s) => (
@@ -360,19 +377,20 @@ const AdminAnimalsPage = () => {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="sex">Sex</Label>
+                <Label htmlFor="sex">Sexo</Label>
                 <Select value={formData.sex} onValueChange={(v) => setFormData({ ...formData, sex: v })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Male">Male</SelectItem>
-                    <SelectItem value="Female">Female</SelectItem>
+                    {sexes.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="age">Age (years)</Label>
+                <Label htmlFor="age">Edad (años)</Label>
                 <Input
                   id="age"
                   type="number"
@@ -383,14 +401,14 @@ const AdminAnimalsPage = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="size">Size</Label>
+                <Label htmlFor="size">Tamaño</Label>
                 <Select value={formData.size} onValueChange={(v) => setFormData({ ...formData, size: v })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {sizes.map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                      <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -399,7 +417,7 @@ const AdminAnimalsPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="birth_date">Birth Date</Label>
+                <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
                 <Input
                   id="birth_date"
                   type="date"
@@ -420,7 +438,7 @@ const AdminAnimalsPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Descripción</Label>
               <Textarea
                 id="description"
                 value={formData.description}
@@ -435,16 +453,16 @@ const AdminAnimalsPage = () => {
                 checked={formData.is_sterilized}
                 onCheckedChange={(checked) => setFormData({ ...formData, is_sterilized: checked as boolean })}
               />
-              <Label htmlFor="is_sterilized" className="font-normal">Is sterilized</Label>
+              <Label htmlFor="is_sterilized" className="font-normal">Está esterilizado/a</Label>
             </div>
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" disabled={isSaving}>
                 {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                {selectedAnimal ? 'Update' : 'Create'}
+                {selectedAnimal ? 'Actualizar' : 'Crear'}
               </Button>
             </DialogFooter>
           </form>
@@ -455,18 +473,18 @@ const AdminAnimalsPage = () => {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Animal</DialogTitle>
+            <DialogTitle>Eliminar Animal</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{selectedAnimal?.animal_name}"? This action cannot be undone.
+              ¿Estás seguro de que deseas eliminar a "{selectedAnimal?.animal_name}"? Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isSaving}>
               {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Delete
+              Eliminar
             </Button>
           </DialogFooter>
         </DialogContent>

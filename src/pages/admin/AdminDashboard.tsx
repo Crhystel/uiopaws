@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FloatingPaws } from '@/components/ui/decorative-shapes';
 
 const AdminDashboard = () => {
@@ -18,29 +18,29 @@ const AdminDashboard = () => {
 
   const managementCards = [
     {
-      title: 'Animals',
-      description: 'Manage pets available for adoption',
+      title: 'Animales',
+      description: 'Gestionar mascotas disponibles para adopción',
       icon: PawPrint,
       href: '/admin/animals',
       color: 'bg-primary/10 text-primary',
     },
     {
-      title: 'Species',
-      description: 'Manage animal species catalog',
+      title: 'Especies',
+      description: 'Gestionar catálogo de especies',
       icon: Dog,
       href: '/admin/species',
       color: 'bg-success/10 text-success',
     },
     {
-      title: 'Breeds',
-      description: 'Manage breed catalog',
+      title: 'Razas',
+      description: 'Gestionar catálogo de razas',
       icon: Cat,
       href: '/admin/breeds',
       color: 'bg-warning/10 text-warning',
     },
     {
-      title: 'Shelters',
-      description: 'Manage partner shelters',
+      title: 'Refugios',
+      description: 'Gestionar refugios asociados',
       icon: Home,
       href: '/admin/shelters',
       color: 'bg-sage text-foreground',
@@ -62,10 +62,10 @@ const AdminDashboard = () => {
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                Admin Dashboard
+                Panel de Administración
               </h1>
               <p className="text-muted-foreground">
-                Welcome back, {user?.first_name}! Manage your adoption platform.
+                ¡Bienvenido, {user?.first_name}! Gestiona tu plataforma de adopción.
               </p>
             </div>
           </motion.div>
@@ -79,7 +79,7 @@ const AdminDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-xl font-bold text-foreground mb-6"
           >
-            Management
+            Gestión
           </motion.h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

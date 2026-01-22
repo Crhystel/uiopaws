@@ -61,7 +61,11 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
     onFiltersChange(newFilters);
   };
 
-  const sizes = ['Small', 'Medium', 'Large'];
+  const sizes = [
+    { value: 'Small', label: 'Pequeño' },
+    { value: 'Medium', label: 'Mediano' },
+    { value: 'Large', label: 'Grande' },
+  ];
 
   return (
     <div className="bg-card rounded-3xl p-6 shadow-card space-y-4">
@@ -69,7 +73,7 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
-          placeholder="Search by name..."
+          placeholder="Buscar por nombre..."
           value={filters.animal_name}
           onChange={(e) => handleChange('animal_name', e.target.value)}
           className="pl-12 rounded-full bg-secondary border-0 h-12"
@@ -83,10 +87,10 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
           onValueChange={(value) => handleChange('id_species', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
-            <SelectValue placeholder="All Species" />
+            <SelectValue placeholder="Todas las Especies" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Species</SelectItem>
+            <SelectItem value="all">Todas las Especies</SelectItem>
             {species.map((s) => (
               <SelectItem key={s.id_species} value={s.id_species.toString()}>
                 {s.species_name}
@@ -101,10 +105,10 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
           onValueChange={(value) => handleChange('id_breed', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
-            <SelectValue placeholder="All Breeds" />
+            <SelectValue placeholder="Todas las Razas" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Breeds</SelectItem>
+            <SelectItem value="all">Todas las Razas</SelectItem>
             {filteredBreeds.map((b) => (
               <SelectItem key={b.id_breed} value={b.id_breed.toString()}>
                 {b.breed_name}
@@ -119,13 +123,13 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
           onValueChange={(value) => handleChange('size', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
-            <SelectValue placeholder="All Sizes" />
+            <SelectValue placeholder="Todos los Tamaños" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Sizes</SelectItem>
+            <SelectItem value="all">Todos los Tamaños</SelectItem>
             {sizes.map((size) => (
-              <SelectItem key={size} value={size}>
-                {size}
+              <SelectItem key={size.value} value={size.value}>
+                {size.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -137,10 +141,10 @@ const AnimalFilters = ({ filters, onFiltersChange }: AnimalFiltersProps) => {
           onValueChange={(value) => handleChange('id_shelter', value)}
         >
           <SelectTrigger className="rounded-full bg-secondary border-0 h-12">
-            <SelectValue placeholder="All Shelters" />
+            <SelectValue placeholder="Todos los Refugios" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Shelters</SelectItem>
+            <SelectItem value="all">Todos los Refugios</SelectItem>
             {shelters.map((s) => (
               <SelectItem key={s.id_shelter} value={s.id_shelter.toString()}>
                 {s.shelter_name}

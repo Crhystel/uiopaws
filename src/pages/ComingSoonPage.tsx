@@ -33,24 +33,24 @@ const ComingSoonPage = () => {
           </motion.div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Coming Soon!
+            ¡Próximamente!
           </h1>
           <p className="text-lg text-muted-foreground max-w-md mx-auto mb-8">
-            The adoption form is currently being developed. Soon you'll be able to 
-            submit your adoption application directly through our platform.
+            El formulario de adopción está actualmente en desarrollo. Pronto podrás 
+            enviar tu solicitud de adopción directamente a través de nuestra plataforma.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/animals">
               <Button variant="outline" className="rounded-full gap-2 px-6 h-12">
                 <ArrowLeft className="w-4 h-4" />
-                Browse More Pets
+                Ver Más Mascotas
               </Button>
             </Link>
             <Link to="/">
               <Button className="rounded-full gap-2 px-6 h-12">
                 <Heart className="w-4 h-4" />
-                Back to Home
+                Volver al Inicio
               </Button>
             </Link>
           </div>

@@ -27,14 +27,14 @@ const LoginPage = () => {
     try {
       await login(email, password);
       toast({
-        title: 'Welcome back!',
-        description: 'You have successfully logged in.',
+        title: '¡Bienvenido de nuevo!',
+        description: 'Has iniciado sesión correctamente.',
       });
       navigate(from);
     } catch (error: any) {
       toast({
-        title: 'Login failed',
-        description: error.response?.data?.message || 'Invalid credentials',
+        title: 'Error al iniciar sesión',
+        description: error.response?.data?.message || 'Credenciales inválidas',
         variant: 'destructive',
       });
     } finally {
@@ -72,20 +72,20 @@ const LoginPage = () => {
                 </motion.div>
                 <span className="text-xl font-bold text-foreground">UIO Paws</span>
               </Link>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Welcome Back!</h1>
-              <p className="text-muted-foreground">Sign in to continue your adoption journey</p>
+              <h1 className="text-2xl font-bold text-foreground mb-2">¡Bienvenido de Nuevo!</h1>
+              <p className="text-muted-foreground">Inicia sesión para continuar tu viaje de adopción</p>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder="tu@ejemplo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-12 rounded-xl h-12 bg-secondary border-0"
@@ -95,7 +95,7 @@ const LoginPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -118,7 +118,7 @@ const LoginPage = () => {
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  'Sign In'
+                  'Iniciar Sesión'
                 )}
               </Button>
             </form>
@@ -126,9 +126,9 @@ const LoginPage = () => {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{' '}
+                ¿No tienes una cuenta?{' '}
                 <Link to="/register" className="text-primary font-medium hover:underline">
-                  Sign up
+                  Regístrate
                 </Link>
               </p>
             </div>
@@ -138,7 +138,7 @@ const LoginPage = () => {
               className="flex items-center justify-center gap-2 mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to home
+              Volver al inicio
             </Link>
           </div>
         </motion.div>

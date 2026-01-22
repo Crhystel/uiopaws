@@ -15,27 +15,27 @@ const Footer = () => {
               <span className="text-xl font-bold text-foreground">UIO Paws</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Connecting loving families with pets in need. Every adoption changes two lives forever.
+              Conectando familias amorosas con mascotas que lo necesitan. Cada adopción cambia dos vidas para siempre.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
+            <h4 className="font-semibold text-foreground mb-4">Enlaces Rápidos</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/animals" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Available Pets
+                  Mascotas Disponibles
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  About Us
+                  Sobre Nosotros
                 </Link>
               </li>
               <li>
                 <Link to="/shelters" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Partner Shelters
+                  Refugios Asociados
                 </Link>
               </li>
             </ul>
@@ -43,21 +43,21 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Support</h4>
+            <h4 className="font-semibold text-foreground mb-4">Soporte</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
+                  Preguntas Frecuentes
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Contact Us
+                  Contáctanos
                 </Link>
               </li>
               <li>
                 <Link to="/donate" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Donate
+                  Donar
                 </Link>
               </li>
             </ul>
@@ -65,11 +65,11 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Contact</h4>
+            <h4 className="font-semibold text-foreground mb-4">Contacto</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4 text-primary" />
-                hello@uiopaws.com
+                hola@uiopaws.com
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary" />
@@ -85,8 +85,8 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} UIO Paws. Made with{' '}
-            <Heart className="w-4 h-4 inline text-primary" /> for our furry friends.
+            © {new Date().getFullYear()} UIO Paws. Hecho con{' '}
+            <Heart className="w-4 h-4 inline text-primary" /> para nuestros amigos peludos.
           </p>
         </div>
       </div>

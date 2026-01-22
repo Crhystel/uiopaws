@@ -31,14 +31,14 @@ const SuperAdminDashboard = () => {
           </motion.div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Welcome, {user?.first_name}!
+            ¡Bienvenido, {user?.first_name}!
           </h1>
           <p className="text-lg text-muted-foreground max-w-md mx-auto mb-4">
-            You are entering as <span className="font-semibold text-primary">Super Admin</span>
+            Estás ingresando como <span className="font-semibold text-primary">Super Administrador</span>
           </p>
           <div className="inline-flex items-center gap-2 text-muted-foreground">
             <Heart className="w-4 h-4 text-primary" />
-            <span>You have full system access</span>
+            <span>Tienes acceso completo al sistema</span>
           </div>
         </motion.div>
       </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import {
   Plus,
   Search,
@@ -8,9 +7,6 @@ import {
   Loader2,
   Home,
   ArrowLeft,
-  Phone,
-  Mail,
-  MapPin,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -63,7 +59,7 @@ const AdminSheltersPage = () => {
       setShelters(data);
     } catch (error) {
       console.error('Error fetching shelters:', error);
-      toast({ title: 'Error', description: 'Failed to fetch shelters', variant: 'destructive' });
+      toast({ title: 'Error', description: 'No se pudieron cargar los refugios', variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
@@ -98,10 +94,10 @@ const AdminSheltersPage = () => {
     try {
       if (selectedShelter) {
         await adminSheltersApi.update(selectedShelter.id_shelter, formData);
-        toast({ title: 'Success', description: 'Shelter updated successfully' });
+        toast({ title: 'Éxito', description: 'Refugio actualizado correctamente' });
       } else {
         await adminSheltersApi.create(formData);
-        toast({ title: 'Success', description: 'Shelter created successfully' });
+        toast({ title: 'Éxito', description: 'Refugio creado correctamente' });
       }
 
       setIsDialogOpen(false);
@@ -109,7 +105,7 @@ const AdminSheltersPage = () => {
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to save shelter',
+        description: error.response?.data?.message || 'No se pudo guardar el refugio',
         variant: 'destructive',
       });
     } finally {
@@ -123,13 +119,13 @@ const AdminSheltersPage = () => {
 
     try {
       await adminSheltersApi.delete(selectedShelter.id_shelter);
-      toast({ title: 'Success', description: 'Shelter deleted successfully' });
+      toast({ title: 'Éxito', description: 'Refugio eliminado correctamente' });
       setIsDeleteDialogOpen(false);
       fetchShelters();
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to delete shelter',
+        description: error.response?.data?.message || 'No se pudo eliminar el refugio',
         variant: 'destructive',
       });
     } finally {
@@ -152,13 +148,13 @@ const AdminSheltersPage = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Manage Shelters</h1>
-                <p className="text-muted-foreground">Add, edit, or remove partner shelters</p>
+                <h1 className="text-2xl font-bold text-foreground">Gestionar Refugios</h1>
+                <p className="text-muted-foreground">Agregar, editar o eliminar refugios asociados</p>
               </div>
             </div>
             <Button onClick={openCreateDialog} className="rounded-full gap-2">
               <Plus className="w-4 h-4" />
-              Add Shelter
+              Agregar Refugio
             </Button>
           </div>
 
@@ -166,7 +162,7 @@ const AdminSheltersPage = () => {
           <div className="relative mb-6 max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search shelters..."
+              placeholder="Buscar refugios..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 rounded-full bg-secondary border-0 h-12"
@@ -183,11 +179,11 @@ const AdminSheltersPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Address</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Dirección</TableHead>
+                    <TableHead>Teléfono</TableHead>
+                    <TableHead>Correo</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -240,14 +236,14 @@ const AdminSheltersPage = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{selectedShelter ? 'Edit Shelter' : 'Add New Shelter'}</DialogTitle>
+            <DialogTitle>{selectedShelter ? 'Editar Refugio' : 'Agregar Nuevo Refugio'}</DialogTitle>
             <DialogDescription>
-              {selectedShelter ? 'Update the shelter details below.' : 'Fill in the details for the new shelter.'}
+              {selectedShelter ? 'Actualiza los datos del refugio a continuación.' : 'Completa los datos del nuevo refugio.'}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="shelter_name">Shelter Name</Label>
+              <Label htmlFor="shelter_name">Nombre del Refugio</Label>
               <Input
                 id="shelter_name"
                 value={formData.shelter_name}
@@ -257,7 +253,7 @@ const AdminSheltersPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
+              <Label htmlFor="address">Dirección</Label>
               <Input
                 id="address"
                 value={formData.address}
@@ -268,7 +264,7 @@ const AdminSheltersPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Teléfono</Label>
                 <Input
                   id="phone"
                   value={formData.phone}
@@ -277,7 +273,7 @@ const AdminSheltersPage = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <Input
                   id="email"
                   type="email"
@@ -290,11 +286,11 @@ const AdminSheltersPage = () => {
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" disabled={isSaving}>
                 {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                {selectedShelter ? 'Update' : 'Create'}
+                {selectedShelter ? 'Actualizar' : 'Crear'}
               </Button>
             </DialogFooter>
           </form>
@@ -305,18 +301,18 @@ const AdminSheltersPage = () => {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Shelter</DialogTitle>
+            <DialogTitle>Eliminar Refugio</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{selectedShelter?.shelter_name}"? This action cannot be undone.
+              ¿Estás seguro de que deseas eliminar "{selectedShelter?.shelter_name}"? Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isSaving}>
               {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Delete
+              Eliminar
             </Button>
           </DialogFooter>
         </DialogContent>
