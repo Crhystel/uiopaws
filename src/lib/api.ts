@@ -119,6 +119,13 @@ export type ShelterUpsertPayload = {
   };
 };
 
+const sanitizeShelterUpsertPayload = (data: any): ShelterUpsertPayload => {
+  // El backend falla si llega id_shelter como string vacío (bigint).
+  // En create/update, el ID siempre va en la URL, nunca en el body.
+  const { id_shelter, ...rest } = data ?? {};
+  return rest as ShelterUpsertPayload;
+};
+
 export type AnimalUpsertPayload = {
   animal_name: string;
   status: 'Disponible' | 'Adoptado' | 'En tratamiento';
@@ -235,11 +242,13 @@ export const adminSheltersApi = {
     return response.data;
   },
   create: async (data: ShelterUpsertPayload): Promise<Shelter> => {
-    const response = await adminApi.post('/admin/shelters', data);
+    const payload = sanitizeShelterUpsertPayload(data);
+    const response = await adminApi.post('/admin/shelters', payload);
     return response.data;
   },
   update: async (id: number, data: ShelterUpsertPayload): Promise<Shelter> => {
-    const response = await adminApi.put(`/admin/shelters/${id}`, data);
+    const payload = sanitizeShelterUpsertPayload(data);
+    const response = await adminApi.put(`/admin/shelters/${id}`, payload);
     return response.data;
   },
   delete: async (id: number): Promise<void> => {
