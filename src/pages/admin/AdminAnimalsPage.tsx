@@ -63,6 +63,7 @@ const AdminAnimalsPage = () => {
     color: '',
     is_sterilized: false,
     description: '',
+    id_species: '',
     id_breed: '',
     id_shelter: '',
     sex: 'Male',
@@ -111,6 +112,7 @@ const AdminAnimalsPage = () => {
       color: '',
       is_sterilized: false,
       description: '',
+      id_species: '',
       id_breed: '',
       id_shelter: '',
       sex: 'Male',
@@ -121,6 +123,8 @@ const AdminAnimalsPage = () => {
   };
 
   const openEditDialog = (animal: Animal) => {
+    const derivedSpeciesId =
+      animal.breed?.id_species ?? breeds.find((b) => b.id_breed === animal.id_breed)?.id_species;
     setSelectedAnimal(animal);
     setFormData({
       animal_name: animal.animal_name,
@@ -129,6 +133,7 @@ const AdminAnimalsPage = () => {
       color: animal.color,
       is_sterilized: animal.is_sterilized,
       description: animal.description || '',
+      id_species: derivedSpeciesId ? derivedSpeciesId.toString() : '',
       id_breed: animal.id_breed?.toString() || '',
       id_shelter: animal.id_shelter?.toString() || '',
       sex: animal.sex,
@@ -138,13 +143,29 @@ const AdminAnimalsPage = () => {
     setIsDialogOpen(true);
   };
 
+  const filteredBreeds = formData.id_species
+    ? breeds.filter((b) => b.id_species === parseInt(formData.id_species))
+    : [];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.id_breed) {
+      toast({
+        title: 'Faltan datos',
+        description: 'Selecciona una especie y una raza antes de guardar.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSaving(true);
 
     try {
+      // id_species se usa solo para filtrar razas en el UI
+      const { id_species: _idSpecies, ...rest } = formData;
       const data = {
-        ...formData,
+        ...rest,
         id_breed: parseInt(formData.id_breed),
         id_shelter: parseInt(formData.id_shelter),
         age: parseInt(formData.age),
@@ -348,18 +369,46 @@ const AdminAnimalsPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="id_breed">Raza</Label>
-                <Select value={formData.id_breed} onValueChange={(v) => setFormData({ ...formData, id_breed: v })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar raza" />
+                <Label htmlFor="id_species">Especie</Label>
+                <Select
+                  value={formData.id_species}
+                  onValueChange={(v) => setFormData({ ...formData, id_species: v, id_breed: '' })}
+                >
+                  <SelectTrigger id="id_species">
+                    <SelectValue placeholder="Seleccionar especie" />
                   </SelectTrigger>
                   <SelectContent>
-                    {breeds.map((b) => (
-                      <SelectItem key={b.id_breed} value={b.id_breed.toString()}>{b.breed_name}</SelectItem>
+                    {species.map((s) => (
+                      <SelectItem key={s.id_species} value={s.id_species.toString()}>
+                        {s.species_name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="id_breed">Raza</Label>
+                <Select
+                  value={formData.id_breed}
+                  onValueChange={(v) => setFormData({ ...formData, id_breed: v })}
+                  disabled={!formData.id_species}
+                >
+                  <SelectTrigger id="id_breed">
+                    <SelectValue
+                      placeholder={formData.id_species ? 'Seleccionar raza' : 'Primero selecciona una especie'}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {filteredBreeds.map((b) => (
+                      <SelectItem key={b.id_breed} value={b.id_breed.toString()}>
+                        {b.breed_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="id_shelter">Refugio</Label>
                 <Select value={formData.id_shelter} onValueChange={(v) => setFormData({ ...formData, id_shelter: v })}>
