@@ -15,6 +15,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Diagnostics: helps confirm provider mounted in preview without relying on DevTools.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (globalThis as any).__UIO_PAWS_AUTH_PROVIDER_MOUNTED__ = true;
+
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
@@ -128,6 +132,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mounted = (globalThis as any).__UIO_PAWS_AUTH_PROVIDER_MOUNTED__;
+    // eslint-disable-next-line no-console
+    console.error('[Auth] useAuth called without provider. Provider mounted flag:', mounted);
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
