@@ -18,7 +18,8 @@ import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminAnimalsPage from "./pages/admin/AdminAnimalsPage";
 import AdminSheltersPage from "./pages/admin/AdminSheltersPage";
-import { AdminSpeciesPage, AdminBreedsPage } from "./pages/admin/AdminPlaceholderPages";
+import AdminSpeciesPage from "./pages/admin/AdminSpeciesPage";
+import AdminBreedsPage from "./pages/admin/AdminBreedsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

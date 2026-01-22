@@ -205,6 +205,34 @@ export const adminSheltersApi = {
   },
 };
 
+export const adminSpeciesApi = {
+  create: async (data: { name: string }): Promise<Species> => {
+    const response = await adminApi.post('/admin/species', data);
+    return response.data;
+  },
+  update: async (id: number, data: { name: string }): Promise<Species> => {
+    const response = await adminApi.put(`/admin/species/${id}`, data);
+    return response.data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await adminApi.delete(`/admin/species/${id}`);
+  },
+};
+
+export const adminBreedsApi = {
+  create: async (data: { name: string; species_id: number }): Promise<Breed> => {
+    const response = await adminApi.post('/admin/breeds', data);
+    return response.data;
+  },
+  update: async (id: number, data: { name: string; species_id: number }): Promise<Breed> => {
+    const response = await adminApi.put(`/admin/breeds/${id}`, data);
+    return response.data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await adminApi.delete(`/admin/breeds/${id}`);
+  },
+};
+
 export const adminPhotosApi = {
   upload: async (animalId: number, file: File): Promise<Photo> => {
     const formData = new FormData();
