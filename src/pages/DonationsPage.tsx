@@ -6,7 +6,6 @@ import { FloatingPaws } from '@/components/ui/decorative-shapes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -84,6 +83,12 @@ const DonationsPage = () => {
     () => [{ id_shelter: -1, shelter_name: 'Todos los refugios' } as Shelter, ...shelters],
     [shelters],
   );
+
+  const shelterNameById = useMemo(() => {
+    const map = new Map<number, string>();
+    shelters.forEach((s) => map.set(s.id_shelter, s.shelter_name));
+    return map;
+  }, [shelters]);
 
   return (
     <Layout>
@@ -180,9 +185,9 @@ const DonationsPage = () => {
             <>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {items.map((item, index) => {
-                  const collected = item.collected_quantity ?? 0;
-                  const needed = item.quantity_needed || 0;
-                  const pct = needed > 0 ? Math.min((collected / needed) * 100, 100) : 0;
+                  const shelterName = item.id_shelter
+                    ? shelterNameById.get(item.id_shelter) ?? 'Refugio no especificado'
+                    : 'Todos los refugios';
 
                   return (
                     <motion.div
@@ -195,7 +200,7 @@ const DonationsPage = () => {
                         <CardHeader>
                           <CardTitle className="text-lg">{item.item_name}</CardTitle>
                           <p className="text-sm text-muted-foreground">
-                            {item.category} · {item.shelter?.shelter_name ?? 'Refugio no especificado'}
+                            {item.category} · {shelterName}
                           </p>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -203,20 +208,14 @@ const DonationsPage = () => {
                             <p className="text-sm text-muted-foreground line-clamp-3">{item.description}</p>
                           ) : null}
 
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">Progreso</span>
-                              <span className="font-medium text-foreground">
-                                {collected} / {needed}
-                              </span>
-                            </div>
-                            <Progress value={pct} />
-                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Meta: <span className="font-medium text-foreground">{item.quantity_needed}</span>
+                          </p>
 
                           <Button
                             className="w-full rounded-full"
                             onClick={() => {
-                              setSelectedShelterName(item.shelter?.shelter_name ?? 'el refugio indicado');
+                              setSelectedShelterName(shelterName || 'el refugio indicado');
                               setIsDevDialogOpen(true);
                             }}
                           >

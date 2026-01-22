@@ -221,10 +221,6 @@ export interface DonationItemCatalog {
   quantity_needed: number;
   description?: string;
   id_shelter?: number | null;
-  shelter?: Partial<Shelter> | null;
-  collected_quantity?: number;
-  created_at?: string;
-  updated_at?: string;
 }
 
 export type DonationItemCatalogUpsertPayload = {
