@@ -86,10 +86,52 @@ export interface Breed {
 export interface Shelter {
   id_shelter: number;
   shelter_name: string;
-  address: string;
+  address:
+    | string
+    | {
+        street: string;
+        city: string;
+        country: string;
+        postal_code: string;
+      };
   phone: string;
   email: string;
 }
+
+export type SpeciesUpsertPayload = {
+  species_name: string;
+};
+
+export type BreedUpsertPayload = {
+  breed_name: string;
+  id_species: number;
+};
+
+export type ShelterUpsertPayload = {
+  shelter_name: string;
+  phone: string;
+  email: string;
+  address: {
+    street: string;
+    city: string;
+    country: string;
+    postal_code: string;
+  };
+};
+
+export type AnimalUpsertPayload = {
+  animal_name: string;
+  status: 'Disponible' | 'Adoptado' | 'En tratamiento';
+  sex: 'Macho' | 'Hembra';
+  size: 'Pequeo' | 'Mediano' | 'Grande';
+  id_breed: number;
+  id_shelter: number;
+  is_sterilized: boolean;
+  age: number;
+  color: string;
+  birth_date?: string;
+  description?: string;
+};
 
 export interface Photo {
   id_photo: number;
@@ -192,11 +234,11 @@ export const adminSheltersApi = {
     const response = await adminApi.get(`/admin/shelters/${id}`);
     return response.data;
   },
-  create: async (data: Partial<Shelter>): Promise<Shelter> => {
+  create: async (data: ShelterUpsertPayload): Promise<Shelter> => {
     const response = await adminApi.post('/admin/shelters', data);
     return response.data;
   },
-  update: async (id: number, data: Partial<Shelter>): Promise<Shelter> => {
+  update: async (id: number, data: ShelterUpsertPayload): Promise<Shelter> => {
     const response = await adminApi.put(`/admin/shelters/${id}`, data);
     return response.data;
   },
@@ -206,11 +248,11 @@ export const adminSheltersApi = {
 };
 
 export const adminSpeciesApi = {
-  create: async (data: { name: string }): Promise<Species> => {
+  create: async (data: SpeciesUpsertPayload): Promise<Species> => {
     const response = await adminApi.post('/admin/species', data);
     return response.data;
   },
-  update: async (id: number, data: { name: string }): Promise<Species> => {
+  update: async (id: number, data: SpeciesUpsertPayload): Promise<Species> => {
     const response = await adminApi.put(`/admin/species/${id}`, data);
     return response.data;
   },
@@ -220,11 +262,11 @@ export const adminSpeciesApi = {
 };
 
 export const adminBreedsApi = {
-  create: async (data: { name: string; species_id: number }): Promise<Breed> => {
+  create: async (data: BreedUpsertPayload): Promise<Breed> => {
     const response = await adminApi.post('/admin/breeds', data);
     return response.data;
   },
-  update: async (id: number, data: { name: string; species_id: number }): Promise<Breed> => {
+  update: async (id: number, data: BreedUpsertPayload): Promise<Breed> => {
     const response = await adminApi.put(`/admin/breeds/${id}`, data);
     return response.data;
   },

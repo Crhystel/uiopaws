@@ -78,6 +78,12 @@ const AnimalDetailPage = () => {
     }
   };
 
+  const formatShelterAddress = (address: any) => {
+    if (!address) return '';
+    if (typeof address === 'string') return address;
+    return [address.street, address.city, address.country, address.postal_code].filter(Boolean).join(', ');
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -219,7 +225,7 @@ const AnimalDetailPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p className="font-medium text-foreground">{animal.shelter.shelter_name}</p>
-                  <p className="text-sm text-muted-foreground">{animal.shelter.address}</p>
+                  <p className="text-sm text-muted-foreground">{formatShelterAddress(animal.shelter.address)}</p>
                   <div className="flex flex-wrap gap-4 text-sm">
                     <a
                       href={`tel:${animal.shelter.phone}`}
