@@ -29,8 +29,8 @@ const RegisterPage = () => {
     
     if (formData.password !== formData.confirmPassword) {
       toast({
-        title: 'Password mismatch',
-        description: 'Passwords do not match',
+        title: 'Las contraseñas no coinciden',
+        description: 'Por favor verifica que las contraseñas sean iguales',
         variant: 'destructive',
       });
       return;
@@ -42,8 +42,8 @@ const RegisterPage = () => {
     // For now, show a success message and redirect to login
     setTimeout(() => {
       toast({
-        title: 'Registration successful!',
-        description: 'Please log in with your credentials.',
+        title: '¡Registro exitoso!',
+        description: 'Por favor inicia sesión con tus credenciales.',
       });
       navigate('/login');
       setIsLoading(false);
@@ -80,21 +80,21 @@ const RegisterPage = () => {
                 </motion.div>
                 <span className="text-xl font-bold text-foreground">UIO Paws</span>
               </Link>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Join Our Family!</h1>
-              <p className="text-muted-foreground">Create an account to start your adoption journey</p>
+              <h1 className="text-2xl font-bold text-foreground mb-2">¡Únete a Nuestra Familia!</h1>
+              <p className="text-muted-foreground">Crea una cuenta para iniciar tu viaje de adopción</p>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
+                  <Label htmlFor="firstName">Nombre</Label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="firstName"
                       name="firstName"
-                      placeholder="John"
+                      placeholder="Juan"
                       value={formData.firstName}
                       onChange={handleChange}
                       className="pl-12 rounded-xl h-12 bg-secondary border-0"
@@ -103,11 +103,11 @@ const RegisterPage = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
+                  <Label htmlFor="lastName">Apellido</Label>
                   <Input
                     id="lastName"
                     name="lastName"
-                    placeholder="Doe"
+                    placeholder="Pérez"
                     value={formData.lastName}
                     onChange={handleChange}
                     className="rounded-xl h-12 bg-secondary border-0"
@@ -117,14 +117,14 @@ const RegisterPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder="tu@ejemplo.com"
                     value={formData.email}
                     onChange={handleChange}
                     className="pl-12 rounded-xl h-12 bg-secondary border-0"
@@ -134,7 +134,7 @@ const RegisterPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -151,7 +151,7 @@ const RegisterPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -175,7 +175,7 @@ const RegisterPage = () => {
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  'Create Account'
+                  'Crear Cuenta'
                 )}
               </Button>
             </form>
@@ -183,9 +183,9 @@ const RegisterPage = () => {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?{' '}
+                ¿Ya tienes una cuenta?{' '}
                 <Link to="/login" className="text-primary font-medium hover:underline">
-                  Sign in
+                  Inicia sesión
                 </Link>
               </p>
             </div>
@@ -195,7 +195,7 @@ const RegisterPage = () => {
               className="flex items-center justify-center gap-2 mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to home
+              Volver al inicio
             </Link>
           </div>
         </motion.div>

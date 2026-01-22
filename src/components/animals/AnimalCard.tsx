@@ -11,6 +11,32 @@ interface AnimalCardProps {
 const AnimalCard = ({ animal }: AnimalCardProps) => {
   const photoUrl = animal.photos?.[0]?.photo_url || '/placeholder.svg';
 
+  const getSizeLabel = (size: string) => {
+    switch (size) {
+      case 'Small': return 'Pequeño';
+      case 'Medium': return 'Mediano';
+      case 'Large': return 'Grande';
+      default: return size;
+    }
+  };
+
+  const getSexLabel = (sex: string) => {
+    switch (sex) {
+      case 'Male': return 'Macho';
+      case 'Female': return 'Hembra';
+      default: return sex;
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'Available': return 'Disponible';
+      case 'Adopted': return 'Adoptado';
+      case 'Pending': return 'Pendiente';
+      default: return status;
+    }
+  };
+
   return (
     <Link to={`/animals/${animal.id_animal}`}>
       <motion.div
@@ -40,7 +66,7 @@ const AnimalCard = ({ animal }: AnimalCardProps) => {
 
           {/* Status Badge */}
           <Badge className="absolute bottom-4 left-4 bg-primary text-primary-foreground rounded-full px-3">
-            {animal.status}
+            {getStatusLabel(animal.status)}
           </Badge>
         </div>
 
@@ -50,28 +76,28 @@ const AnimalCard = ({ animal }: AnimalCardProps) => {
             <div>
               <h3 className="text-lg font-bold text-foreground">{animal.animal_name}</h3>
               <p className="text-sm text-muted-foreground">
-                {animal.breed?.breed_name || 'Mixed Breed'}
+                {animal.breed?.breed_name || 'Raza Mixta'}
               </p>
             </div>
             <Badge variant="secondary" className="rounded-full">
-              {animal.sex}
+              {getSexLabel(animal.sex)}
             </Badge>
           </div>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4 text-primary" />
-              <span>{animal.age} {animal.age === 1 ? 'year' : 'years'}</span>
+              <span>{animal.age} {animal.age === 1 ? 'año' : 'años'}</span>
             </div>
             <div className="flex items-center gap-1">
               <MapPin className="w-4 h-4 text-primary" />
-              <span>{animal.shelter?.shelter_name || 'Shelter'}</span>
+              <span>{animal.shelter?.shelter_name || 'Refugio'}</span>
             </div>
           </div>
 
           <div className="flex gap-2">
             <Badge variant="outline" className="rounded-full text-xs">
-              {animal.size}
+              {getSizeLabel(animal.size)}
             </Badge>
             <Badge variant="outline" className="rounded-full text-xs">
               {animal.color}

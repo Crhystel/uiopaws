@@ -52,6 +52,32 @@ const AnimalDetailPage = () => {
     }
   };
 
+  const getSizeLabel = (size: string) => {
+    switch (size) {
+      case 'Small': return 'Pequeño';
+      case 'Medium': return 'Mediano';
+      case 'Large': return 'Grande';
+      default: return size;
+    }
+  };
+
+  const getSexLabel = (sex: string) => {
+    switch (sex) {
+      case 'Male': return 'Macho';
+      case 'Female': return 'Hembra';
+      default: return sex;
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'Available': return 'Disponible';
+      case 'Adopted': return 'Adoptado';
+      case 'Pending': return 'Pendiente';
+      default: return status;
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -66,7 +92,7 @@ const AnimalDetailPage = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <p className="text-muted-foreground">Animal not found</p>
+          <p className="text-muted-foreground">Mascota no encontrada</p>
         </div>
       </Layout>
     );
@@ -80,7 +106,7 @@ const AnimalDetailPage = () => {
         {/* Back Button */}
         <Link to="/animals" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          Back to all pets
+          Volver a todas las mascotas
         </Link>
 
         <div className="grid lg:grid-cols-2 gap-12">
@@ -97,7 +123,7 @@ const AnimalDetailPage = () => {
                 className="w-full h-full object-cover"
               />
               <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground rounded-full px-4">
-                {animal.status}
+                {getStatusLabel(animal.status)}
               </Badge>
             </div>
 
@@ -115,7 +141,7 @@ const AnimalDetailPage = () => {
                   >
                     <img
                       src={photo.photo_url}
-                      alt={`${animal.animal_name} photo ${index + 1}`}
+                      alt={`${animal.animal_name} foto ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -135,20 +161,20 @@ const AnimalDetailPage = () => {
                 {animal.animal_name}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {animal.breed?.breed_name || 'Mixed Breed'} • {animal.species?.species_name || 'Unknown'}
+                {animal.breed?.breed_name || 'Raza Mixta'} • {animal.species?.species_name || 'Desconocido'}
               </p>
             </div>
 
             {/* Quick Info */}
             <div className="flex flex-wrap gap-3">
               <Badge variant="secondary" className="rounded-full px-4 py-2 text-sm">
-                {animal.sex}
+                {getSexLabel(animal.sex)}
               </Badge>
               <Badge variant="secondary" className="rounded-full px-4 py-2 text-sm">
-                {animal.age} {animal.age === 1 ? 'year' : 'years'} old
+                {animal.age} {animal.age === 1 ? 'año' : 'años'}
               </Badge>
               <Badge variant="secondary" className="rounded-full px-4 py-2 text-sm">
-                {animal.size}
+                {getSizeLabel(animal.size)}
               </Badge>
               <Badge variant="secondary" className="rounded-full px-4 py-2 text-sm">
                 {animal.color}
@@ -160,12 +186,12 @@ const AnimalDetailPage = () => {
               {animal.is_sterilized ? (
                 <>
                   <CheckCircle2 className="w-5 h-5 text-success" />
-                  <span className="text-foreground">Sterilized</span>
+                  <span className="text-foreground">Esterilizado/a</span>
                 </>
               ) : (
                 <>
                   <XCircle className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">Not sterilized</span>
+                  <span className="text-muted-foreground">No esterilizado/a</span>
                 </>
               )}
             </div>
@@ -173,11 +199,11 @@ const AnimalDetailPage = () => {
             {/* Description */}
             <Card className="rounded-2xl">
               <CardHeader>
-                <CardTitle className="text-lg">About {animal.animal_name}</CardTitle>
+                <CardTitle className="text-lg">Sobre {animal.animal_name}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed">
-                  {animal.description || 'No description available.'}
+                  {animal.description || 'No hay descripción disponible.'}
                 </p>
               </CardContent>
             </Card>
@@ -188,7 +214,7 @@ const AnimalDetailPage = () => {
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-primary" />
-                    Shelter Information
+                    Información del Refugio
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -220,7 +246,7 @@ const AnimalDetailPage = () => {
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Stethoscope className="w-5 h-5 text-primary" />
-                    Medical Records
+                    Historial Médico
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -228,11 +254,11 @@ const AnimalDetailPage = () => {
                     <div key={record.id_medical_record} className="border-l-2 border-primary/30 pl-4">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                         <Calendar className="w-4 h-4" />
-                        {new Date(record.record_date).toLocaleDateString()}
+                        {new Date(record.record_date).toLocaleDateString('es-ES')}
                       </div>
                       <p className="text-foreground">{record.description}</p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        By: {record.veterinarian}
+                        Por: {record.veterinarian}
                       </p>
                     </div>
                   ))}
@@ -248,7 +274,7 @@ const AnimalDetailPage = () => {
                 onClick={handleAdoptClick}
               >
                 <Heart className="w-5 h-5" />
-                Adopt {animal.animal_name}
+                Adoptar a {animal.animal_name}
               </Button>
               <Button
                 size="lg"

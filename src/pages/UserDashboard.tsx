@@ -31,14 +31,14 @@ const UserDashboard = () => {
           </motion.div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Welcome, {user?.first_name}!
+            ¡Bienvenido, {user?.first_name}!
           </h1>
           <p className="text-lg text-muted-foreground max-w-md mx-auto mb-4">
-            You are entering as a <span className="font-semibold text-primary">User</span>
+            Estás ingresando como <span className="font-semibold text-primary">Usuario</span>
           </p>
           <div className="inline-flex items-center gap-2 text-muted-foreground">
             <Heart className="w-4 h-4 text-primary" />
-            <span>Thank you for being part of our community</span>
+            <span>Gracias por ser parte de nuestra comunidad</span>
           </div>
         </motion.div>
       </div>

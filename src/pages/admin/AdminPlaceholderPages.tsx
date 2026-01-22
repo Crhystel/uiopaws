@@ -47,17 +47,17 @@ const AdminPlaceholderPage = ({ title, description }: AdminPlaceholderPageProps)
               </motion.div>
 
               <h2 className="text-2xl font-bold text-foreground mb-2">
-                Coming Soon
+                Próximamente
               </h2>
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                This management section is currently under development. 
-                Check back soon for full CRUD functionality.
+                Esta sección de gestión está actualmente en desarrollo. 
+                Pronto tendrás acceso completo a las funciones CRUD.
               </p>
 
               <Link to="/admin">
                 <Button variant="outline" className="rounded-full gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  Back to Dashboard
+                  Volver al Panel
                 </Button>
               </Link>
             </motion.div>
@@ -70,14 +70,14 @@ const AdminPlaceholderPage = ({ title, description }: AdminPlaceholderPageProps)
 
 export const AdminSpeciesPage = () => (
   <AdminPlaceholderPage 
-    title="Manage Species" 
-    description="Add, edit, or remove animal species"
+    title="Gestionar Especies" 
+    description="Agregar, editar o eliminar especies de animales"
   />
 );
 
 export const AdminBreedsPage = () => (
   <AdminPlaceholderPage 
-    title="Manage Breeds" 
-    description="Add, edit, or remove animal breeds"
+    title="Gestionar Razas" 
+    description="Agregar, editar o eliminar razas de animales"
   />
 );

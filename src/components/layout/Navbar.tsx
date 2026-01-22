@@ -12,8 +12,8 @@ const Navbar = () => {
   const { isAuthenticated, user, logout, hasRole } = useAuth();
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/animals', label: 'Adopt a Pet' },
+    { href: '/', label: 'Inicio' },
+    { href: '/animals', label: 'Adoptar Mascota' },
   ];
 
   const handleLogout = () => {
@@ -66,7 +66,7 @@ const Navbar = () => {
                 <Link to={getDashboardLink()}>
                   <Button variant="ghost" size="sm" className="gap-2">
                     <LayoutDashboard className="w-4 h-4" />
-                    Dashboard
+                    Panel
                   </Button>
                 </Link>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full">
@@ -81,12 +81,12 @@ const Navbar = () => {
               <>
                 <Link to="/login">
                   <Button variant="ghost" size="sm">
-                    Login
+                    Iniciar Sesión
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button size="sm" className="rounded-full">
-                    Register
+                    Registrarse
                   </Button>
                 </Link>
               </>
@@ -133,24 +133,24 @@ const Navbar = () => {
                     <Link to={getDashboardLink()} onClick={() => setIsOpen(false)}>
                       <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
                         <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
+                        Panel
                       </Button>
                     </Link>
                     <Button variant="ghost" size="sm" className="w-full justify-start gap-2" onClick={handleLogout}>
                       <LogOut className="w-4 h-4" />
-                      Logout
+                      Cerrar Sesión
                     </Button>
                   </>
                 ) : (
                   <>
                     <Link to="/login" onClick={() => setIsOpen(false)}>
                       <Button variant="ghost" size="sm" className="w-full">
-                        Login
+                        Iniciar Sesión
                       </Button>
                     </Link>
                     <Link to="/register" onClick={() => setIsOpen(false)}>
                       <Button size="sm" className="w-full rounded-full">
-                        Register
+                        Registrarse
                       </Button>
                     </Link>
                   </>

@@ -65,14 +65,14 @@ const AnimalsPage = () => {
           >
             <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mb-4">
               <PawPrintIcon className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Find Your Perfect Match</span>
+              <span className="text-sm font-medium text-primary">Encuentra tu Compañero Ideal</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Available Pets for Adoption
+              Mascotas Disponibles para Adopción
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Each of these loving animals is looking for their forever home. 
-              Could you be their perfect match?
+              Cada uno de estos animales amorosos está buscando su hogar para siempre. 
+              ¿Podrías ser su compañero perfecto?
             </p>
           </motion.div>
         </div>
@@ -99,8 +99,8 @@ const AnimalsPage = () => {
           ) : animals.length === 0 ? (
             <div className="text-center py-20">
               <PawPrintIcon className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">No pets found</h3>
-              <p className="text-muted-foreground">Try adjusting your filters to find more pets</p>
+              <h3 className="text-xl font-semibold text-foreground mb-2">No se encontraron mascotas</h3>
+              <p className="text-muted-foreground">Intenta ajustar los filtros para encontrar más mascotas</p>
             </div>
           ) : (
             <>
@@ -126,7 +126,7 @@ const AnimalsPage = () => {
                     disabled={currentPage === 1}
                     className="rounded-full"
                   >
-                    Previous
+                    Anterior
                   </Button>
                   <div className="flex items-center gap-1 px-4">
                     {Array.from({ length: lastPage }, (_, i) => i + 1).map((page) => (
@@ -149,7 +149,7 @@ const AnimalsPage = () => {
                     disabled={currentPage === lastPage}
                     className="rounded-full"
                   >
-                    Next
+                    Siguiente
                   </Button>
                 </div>
               )}

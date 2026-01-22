@@ -8,26 +8,26 @@ import heroPets from '@/assets/hero-pets.jpg';
 
 const Index = () => {
   const stats = [
-    { value: '2,500+', label: 'Pets Adopted' },
-    { value: '150+', label: 'Partner Shelters' },
-    { value: '10k+', label: 'Happy Families' },
+    { value: '2,500+', label: 'Mascotas Adoptadas' },
+    { value: '150+', label: 'Refugios Asociados' },
+    { value: '10k+', label: 'Familias Felices' },
   ];
 
   const features = [
     {
       icon: Heart,
-      title: 'Find Your Match',
-      description: 'Browse through hundreds of adorable pets waiting for their forever home.',
+      title: 'Encuentra tu Compañero',
+      description: 'Explora cientos de adorables mascotas esperando su hogar para siempre.',
     },
     {
       icon: Sparkles,
-      title: 'Easy Adoption',
-      description: 'Our streamlined process makes adopting your new best friend simple and stress-free.',
+      title: 'Adopción Fácil',
+      description: 'Nuestro proceso simplificado hace que adoptar a tu nuevo mejor amigo sea sencillo.',
     },
     {
       icon: PawPrint,
-      title: 'Support Shelters',
-      description: 'Every adoption helps shelters continue their mission to rescue and care for animals.',
+      title: 'Apoya a los Refugios',
+      description: 'Cada adopción ayuda a los refugios a continuar su misión de rescatar y cuidar animales.',
     },
   ];
 
@@ -56,29 +56,29 @@ const Index = () => {
             >
               <div className="inline-flex items-center gap-2 bg-secondary rounded-full px-4 py-2">
                 <Heart className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-foreground">Adopt, Don't Shop</span>
+                <span className="text-sm font-medium text-foreground">Adopta, No Compres</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight">
-                Find Your New
-                <span className="block text-primary">Best Friend</span>
+                Encuentra tu Nuevo
+                <span className="block text-primary">Mejor Amigo</span>
               </h1>
 
               <p className="text-lg text-muted-foreground max-w-lg">
-                Open your heart and home to a loving companion. Every pet deserves a family, 
-                and every family deserves the unconditional love of a pet.
+                Abre tu corazón y hogar a un compañero amoroso. Cada mascota merece una familia, 
+                y cada familia merece el amor incondicional de una mascota.
               </p>
 
               <div className="flex flex-wrap gap-4">
                 <Link to="/animals">
                   <Button size="lg" className="rounded-full gap-2 px-8 h-14 text-base">
                     <PawPrint className="w-5 h-5" />
-                    Meet Our Pets
+                    Conoce Nuestras Mascotas
                   </Button>
                 </Link>
                 <Link to="/about">
                   <Button variant="outline" size="lg" className="rounded-full gap-2 px-8 h-14 text-base">
-                    Learn More
+                    Saber Más
                     <ArrowRight className="w-5 h-5" />
                   </Button>
                 </Link>
@@ -112,7 +112,7 @@ const Index = () => {
                 <div className="rounded-[3rem] overflow-hidden shadow-hover">
                   <img
                     src={heroPets}
-                    alt="Happy pets waiting for adoption"
+                    alt="Mascotas felices esperando adopción"
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -128,8 +128,8 @@ const Index = () => {
                       <Heart className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <p className="font-bold text-foreground">100+ Pets</p>
-                      <p className="text-sm text-muted-foreground">Ready to adopt</p>
+                      <p className="font-bold text-foreground">100+ Mascotas</p>
+                      <p className="text-sm text-muted-foreground">Listas para adoptar</p>
                     </div>
                   </div>
                 </motion.div>
@@ -155,10 +155,10 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Why Adopt With Us?
+              ¿Por Qué Adoptar con Nosotros?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We make the adoption journey simple, joyful, and meaningful for both you and your future pet.
+              Hacemos que el camino hacia la adopción sea simple, alegre y significativo tanto para ti como para tu futura mascota.
             </p>
           </motion.div>
 
@@ -193,11 +193,11 @@ const Index = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6">
-              Ready to Change a Life?
+              ¿Listo para Cambiar una Vida?
             </h2>
             <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-              Thousands of loving animals are waiting for their forever homes. 
-              Start your adoption journey today and make a difference.
+              Miles de animales amorosos están esperando su hogar para siempre. 
+              Comienza tu camino de adopción hoy y marca la diferencia.
             </p>
             <Link to="/animals">
               <Button
@@ -206,7 +206,7 @@ const Index = () => {
                 className="rounded-full gap-2 px-8 h-14 text-base"
               >
                 <PawPrint className="w-5 h-5" />
-                View Available Pets
+                Ver Mascotas Disponibles
               </Button>
             </Link>
           </motion.div>
