@@ -55,6 +55,22 @@ export interface LoginResponse {
   user?: User;
 }
 
+export type RegisterPayload = {
+  first_name: string;
+  middle_name?: string;
+  last_name: string;
+  second_last_name?: string;
+  document_type: 'Cédula' | 'Pasaporte' | 'RUC';
+  document_number: string;
+  phone: string;
+  email: string;
+  password: string;
+};
+
+export type RegisterResponse = {
+  message: string;
+};
+
 export interface Animal {
   id_animal: number;
   animal_name: string;
@@ -194,6 +210,10 @@ export interface PaginatedResponse<T> {
 export const authApi = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
     const response = await adminApi.post('/login', { email, password });
+    return response.data;
+  },
+  register: async (payload: RegisterPayload): Promise<RegisterResponse> => {
+    const response = await adminApi.post('/register', payload);
     return response.data;
   },
   profile: async (): Promise<User> => {
