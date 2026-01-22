@@ -219,6 +219,7 @@ export interface DonationItemCatalog {
   item_name: string;
   category: string;
   quantity_needed: number;
+  collected_quantity?: number;
   description?: string;
   id_shelter?: number | null;
 }
