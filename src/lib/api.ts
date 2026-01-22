@@ -371,9 +371,18 @@ export const adminBreedsApi = {
 };
 
 export const adminDonationItemsCatalogApi = {
-  getAll: async (): Promise<{ data: DonationItemCatalog[] }> => {
+  getAll: async (): Promise<DonationItemCatalog[]> => {
     const response = await adminApi.get('/admin/donation-items-catalog');
-    return response.data;
+    console.log('Datos Admin Donaciones:', response);
+    // Handle both array response and { data: [] } response
+    const rawData = response.data;
+    if (Array.isArray(rawData)) {
+      return rawData;
+    }
+    if (rawData && Array.isArray(rawData.data)) {
+      return rawData.data;
+    }
+    return [];
   },
   getById: async (id: number): Promise<DonationItemCatalog> => {
     const response = await adminApi.get(`/admin/donation-items-catalog/${id}`);
