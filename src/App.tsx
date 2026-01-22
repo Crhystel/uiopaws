@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import RoleBasedRedirect from "@/components/auth/RoleBasedRedirect";
-import { AuthProvider } from "@/contexts/AuthContext";
 
 // Pages
 import Index from "./pages/Index";
@@ -26,93 +25,91 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <AuthProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/animals" element={<AnimalsPage />} />
-            <Route path="/animals/:id" element={<AnimalDetailPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/adopt/coming-soon" element={<ComingSoonPage />} />
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Index />} />
+          <Route path="/animals" element={<AnimalsPage />} />
+          <Route path="/animals/:id" element={<AnimalDetailPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/adopt/coming-soon" element={<ComingSoonPage />} />
 
-            {/* Role-based redirect after login */}
-            <Route path="/dashboard" element={<RoleBasedRedirect />} />
+          {/* Role-based redirect after login */}
+          <Route path="/dashboard" element={<RoleBasedRedirect />} />
 
-            {/* User Dashboard */}
-            <Route
-              path="/user"
-              element={
-                <ProtectedRoute>
-                  <UserDashboard />
-                </ProtectedRoute>
-              }
-            />
+          {/* User Dashboard */}
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* Super Admin Dashboard */}
-            <Route
-              path="/super-admin"
-              element={
-                <ProtectedRoute requiredRole="Super Admin">
-                  <SuperAdminDashboard />
-                </ProtectedRoute>
-              }
-            />
+          {/* Super Admin Dashboard */}
+          <Route
+            path="/super-admin"
+            element={
+              <ProtectedRoute requiredRole="Super Admin">
+                <SuperAdminDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* Admin Routes */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requiredRole="Admin">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/animals"
-              element={
-                <ProtectedRoute requiredRole="Admin">
-                  <AdminAnimalsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/species"
-              element={
-                <ProtectedRoute requiredRole="Admin">
-                  <AdminSpeciesPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/breeds"
-              element={
-                <ProtectedRoute requiredRole="Admin">
-                  <AdminBreedsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/shelters"
-              element={
-                <ProtectedRoute requiredRole="Admin">
-                  <AdminSheltersPage />
-                </ProtectedRoute>
-              }
-            />
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/animals"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminAnimalsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/species"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminSpeciesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/breeds"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminBreedsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/shelters"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminSheltersPage />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </AuthProvider>
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
