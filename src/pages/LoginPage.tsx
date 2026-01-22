@@ -18,7 +18,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const from = (location.state as any)?.from || '/';
+  // If there is no intended protected destination, send the user through
+  // the role-based redirect entry point.
+  const from = (location.state as any)?.from || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ const LoginPage = () => {
         title: '¡Bienvenido de nuevo!',
         description: 'Has iniciado sesión correctamente.',
       });
-      navigate(from);
+      navigate(from === '/' ? '/dashboard' : from);
     } catch (error: any) {
       toast({
         title: 'Error al iniciar sesión',
