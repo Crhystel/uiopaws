@@ -117,12 +117,15 @@ const AdminSheltersPage = () => {
     setIsSaving(true);
 
     try {
-      const payload = {
+      const payload: any = {
         shelter_name: formData.shelter_name,
         contact_phone: formData.phone,
         contact_email: formData.email,
         address: formData.address,
       };
+
+      // Asegura que nunca se envíe un id_shelter (o cualquier id) en el body.
+      delete payload.id_shelter;
 
       if (selectedShelter) {
         await adminSheltersApi.update(selectedShelter.id_shelter, payload);
