@@ -117,11 +117,18 @@ const AdminSheltersPage = () => {
     setIsSaving(true);
 
     try {
+      const payload = {
+        shelter_name: formData.shelter_name,
+        contact_phone: formData.phone,
+        contact_email: formData.email,
+        address: formData.address,
+      };
+
       if (selectedShelter) {
-        await adminSheltersApi.update(selectedShelter.id_shelter, formData);
+        await adminSheltersApi.update(selectedShelter.id_shelter, payload);
         toast({ title: 'Éxito', description: 'Refugio actualizado correctamente' });
       } else {
-        await adminSheltersApi.create(formData);
+        await adminSheltersApi.create(payload);
         toast({ title: 'Éxito', description: 'Refugio creado correctamente' });
       }
 

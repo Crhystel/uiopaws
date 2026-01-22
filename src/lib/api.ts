@@ -109,8 +109,8 @@ export type BreedUpsertPayload = {
 
 export type ShelterUpsertPayload = {
   shelter_name: string;
-  phone: string;
-  email: string;
+  contact_phone: string;
+  contact_email: string;
   address: {
     street: string;
     city: string;
