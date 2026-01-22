@@ -15,10 +15,11 @@ const RoleBasedRedirect = () => {
       return;
     }
 
-    if (hasRole('Admin')) {
-      navigate('/admin');
-    } else if (hasRole('Super Admin')) {
+    // Highest privilege first to avoid accidental matches when a user has multiple roles.
+    if (hasRole('Super Admin')) {
       navigate('/super-admin');
+    } else if (hasRole('Admin')) {
+      navigate('/admin');
     } else {
       navigate('/user');
     }
