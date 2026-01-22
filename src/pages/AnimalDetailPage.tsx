@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { publicAnimalsApi, Animal } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
+import { resolveAnimalPhotoUrl } from '@/lib/media';
 
 const AnimalDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -104,7 +105,7 @@ const AnimalDetailPage = () => {
     );
   }
 
-  const photos = animal.photos?.length ? animal.photos : [{ photo_url: '/placeholder.svg', id_photo: 0 }];
+  const photos = animal.photos?.length ? animal.photos : [{ photo_url: '/placeholder.svg', id_photo: 0 } as any];
 
   return (
     <Layout>
@@ -124,7 +125,7 @@ const AnimalDetailPage = () => {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-card aspect-square">
               <img
-                src={photos[selectedPhoto]?.photo_url || '/placeholder.svg'}
+                src={resolveAnimalPhotoUrl(photos[selectedPhoto], '/placeholder.svg')}
                 alt={animal.animal_name}
                 className="w-full h-full object-cover"
               />
@@ -146,7 +147,7 @@ const AnimalDetailPage = () => {
                     }`}
                   >
                     <img
-                      src={photo.photo_url}
+                        src={resolveAnimalPhotoUrl(photo, '/placeholder.svg')}
                       alt={`${animal.animal_name} foto ${index + 1}`}
                       className="w-full h-full object-cover"
                     />

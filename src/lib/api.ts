@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-const PUBLIC_API_URL = 'https://uiopaws-api2.onrender.com/api/public';
-const ADMIN_API_URL = 'https://uiopaws-api2.onrender.com/api';
+// NOTE: The backend returns relative media paths like "storage/animal-photos/x.jpg".
+// Use API_ORIGIN (without /api) to build absolute URLs for images.
+export const API_ORIGIN = 'https://uiopaws-api2.onrender.com';
+
+const PUBLIC_API_URL = `${API_ORIGIN}/api/public`;
+const ADMIN_API_URL = `${API_ORIGIN}/api`;
 
 // Create axios instances
 export const publicApi = axios.create({
@@ -163,8 +167,11 @@ export type AnimalUpsertPayload = {
 
 export interface Photo {
   id_photo: number;
-  photo_url: string;
   id_animal: number;
+  // The Laravel backend may return either `image_url` or `photo_url`.
+  // We support both for compatibility.
+  image_url?: string;
+  photo_url?: string;
 }
 
 export interface MedicalRecord {
