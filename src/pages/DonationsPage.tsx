@@ -6,6 +6,7 @@ import { FloatingPaws } from '@/components/ui/decorative-shapes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -189,6 +190,10 @@ const DonationsPage = () => {
                     ? shelterNameById.get(item.id_shelter) ?? 'Refugio no especificado'
                     : 'Todos los refugios';
 
+                  const collected = item.collected_quantity ?? 0;
+                  const needed = item.quantity_needed ?? 0;
+                  const pct = needed > 0 ? (collected / needed) * 100 : 0;
+
                   return (
                     <motion.div
                       key={item.id_donation_item_catalog}
@@ -208,9 +213,15 @@ const DonationsPage = () => {
                             <p className="text-sm text-muted-foreground line-clamp-3">{item.description}</p>
                           ) : null}
 
-                          <p className="text-sm text-muted-foreground">
-                            Meta: <span className="font-medium text-foreground">{item.quantity_needed}</span>
-                          </p>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Progreso</span>
+                              <span className="font-medium text-foreground">
+                                {collected} / {needed}
+                              </span>
+                            </div>
+                            <Progress value={Math.min(pct, 100)} />
+                          </div>
 
                           <Button
                             className="w-full rounded-full"
